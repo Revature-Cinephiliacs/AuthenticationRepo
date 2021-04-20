@@ -5,6 +5,7 @@ Repository for the Authentication API
 ## Instructions
 
 baseurl: to be determined
+
 Headers: {Authorization: `Bearer ${token}`}
 
 ### example headers using RestSharp
