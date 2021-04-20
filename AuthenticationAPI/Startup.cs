@@ -35,6 +35,20 @@ namespace AuthenticationAPI
 
             services.AddControllers();
 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_corsPolicy",
+                    builder => builder
+                    // .WithOrigins("http://localhost:4200/")
+                    // .WithOrigins("https://inthekitchenfront.azurewebsites.net/")
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    // .AllowCredentials()
+                    );
+            });
+
             // for authentication
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
             // string domain = $"https://authenticationapi/";
@@ -78,8 +92,8 @@ namespace AuthenticationAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
+            app.UseCors("_corsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

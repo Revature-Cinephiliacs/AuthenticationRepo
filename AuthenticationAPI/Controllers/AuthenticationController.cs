@@ -22,9 +22,9 @@ namespace AuthenticationAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult Get()
+        public ActionResult<string> Get()
         {
-            return Ok();
+            return Ok(new { response = "success" });
         }
 
         [HttpGet("userdata")]
