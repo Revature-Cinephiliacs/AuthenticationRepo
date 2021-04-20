@@ -34,6 +34,10 @@ namespace AuthenticationAPI.Controllers
             // if we need to get user data
             // pass to helper
             var dictionary = await _helper.GetUserAuth0Dictionary(this.Request);
+            if (dictionary == null)
+            {
+                return new ForbidResult();
+            }
             return dictionary;
         }
 
