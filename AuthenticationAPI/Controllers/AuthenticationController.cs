@@ -25,6 +25,7 @@ namespace AuthenticationAPI.Controllers
         public ActionResult<string> Get()
         {
             return Ok(new { response = "success" });
+            // return Ok();
         }
 
         [HttpGet("userdata")]
