@@ -14,6 +14,7 @@ Headers: {Authorization: `Bearer ${token}`}
 - look at https://github.com/NNKamel/testapi for "complete" example on using this as a backend api
 - look at https://github.com/NNKamel/auth0-angular-test for "complete" example on using this as a frontend SPA
 
+
 ### Available requests:
 
 GET request:
@@ -31,3 +32,4 @@ GET request:
 GET request:
 
 - {baseurl}/ismoderator --> if user is signed in and a moderator (in auth0), returns {access: "granted"}, else returns Forbidden Result.
+
