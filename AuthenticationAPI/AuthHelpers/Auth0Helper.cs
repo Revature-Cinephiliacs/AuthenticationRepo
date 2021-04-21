@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using Newtonsoft.Json;
 
-namespace Service.Authenticators
+namespace AuthenticationAPI.AuthHelpers
 {
     public class Auth0Helper
     {

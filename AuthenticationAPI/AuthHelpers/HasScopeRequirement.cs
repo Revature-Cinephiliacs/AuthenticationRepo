@@ -2,7 +2,7 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 
-namespace KitchenWeb.Helpers
+namespace AuthenticationAPI.AuthHelpers
 {
     public class HasScopeRequirement : IAuthorizationRequirement
     {
