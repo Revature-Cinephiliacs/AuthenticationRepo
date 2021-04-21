@@ -68,10 +68,12 @@ namespace AuthenticationAPI
             });
 
             // for permissions/authorization
-            string permission = "";
+            string adminPermisson = "manage:website";
+            // string modPermission = "manage:forums";
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(permission, policy => policy.Requirements.Add(new HasScopeRequirement(permission, domain)));
+                options.AddPolicy(adminPermisson, policy => policy.Requirements.Add(new HasScopeRequirement(adminPermisson, domain)));
+                // options.AddPolicy(modPermission, policy => policy.Requirements.Add(new HasScopeRequirement(modPermission, domain)));
             });
 
 

@@ -24,14 +24,22 @@ namespace AuthenticationAPI.Controllers
         [Authorize]
         public ActionResult<string> Get()
         {
-            return Ok(new { response = "success" });
-            // return Ok();
+            this.User.Claims.ToList().ForEach(claim =>
+            {
+                System.Console.WriteLine("key: " + claim.Type);
+                System.Console.WriteLine("claim: " + claim.Value);
+            });
+            return Ok(new { access = "granted" });
         }
 
         [HttpGet("userdata")]
         [Authorize]
         public async Task<ActionResult<Dictionary<string, string>>> GetUserData()
         {
+            this.User.Claims.ToList().ForEach(claim =>
+            {
+                System.Console.WriteLine("claim: " + claim.Value);
+            });
             // if we need to get user data
             // pass to helper
             var dictionary = await _helper.GetUserAuth0Dictionary(this.Request);
@@ -42,6 +50,23 @@ namespace AuthenticationAPI.Controllers
             return dictionary;
         }
 
+
+        [HttpGet("isadmin")]
+        [Authorize("manage:website")]
+        public ActionResult IsAdmin()
+        {
+            System.Console.WriteLine("access for admin granted");
+            return Ok(new { access = "granted" });
+        }
+
+
+        [HttpGet("ismoderator")]
+        [Authorize("manage:forums")]
+        public ActionResult IsModerator()
+        {
+            System.Console.WriteLine("access for moderator granted");
+            return Ok(new { access = "granted" });
+        }
 
     }
 }
