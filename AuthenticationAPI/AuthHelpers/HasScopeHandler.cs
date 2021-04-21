@@ -6,6 +6,12 @@ namespace KitchenWeb.Helpers
 {
     public class HasScopeHandler : AuthorizationHandler<HasScopeRequirement>
     {
+        /// <summary>
+        /// finds the permission required and returns a success if found
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HasScopeRequirement requirement)
         {
             // If user does not have the scope claim, get out of here

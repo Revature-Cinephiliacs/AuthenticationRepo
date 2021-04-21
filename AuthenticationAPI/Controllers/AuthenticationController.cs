@@ -20,20 +20,21 @@ namespace AuthenticationAPI.Controllers
             this._helper = _helper;
         }
 
+        /// <summary>
+        /// returns true if request has a valid token
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         public ActionResult<string> Get()
         {
-            this.User.Claims.ToList().ForEach(claim =>
-            {
-                System.Console.WriteLine("type: " + claim.Type);
-                System.Console.WriteLine("subject: " + claim.Subject);
-                System.Console.WriteLine("Issuer: " + claim.Issuer);
-                System.Console.WriteLine("claim: " + claim.Value);
-            });
             return Ok(new { access = "granted" });
         }
 
+        /// <summary>
+        /// returns the userdata saved in auth0 if user is signed in
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("userdata")]
         [Authorize]
         public async Task<ActionResult<Dictionary<string, string>>> GetUserData()
@@ -47,12 +48,15 @@ namespace AuthenticationAPI.Controllers
             var dictionary = await _helper.GetUserAuth0Dictionary(this.Request);
             if (dictionary == null)
             {
-                return new ForbidResult();
+                return new BadRequestResult();
             }
             return dictionary;
         }
 
-
+        /// <summary>
+        /// for checking if a request's user has admin permission
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("isadmin")]
         [Authorize("manage:awebsite")]
         public ActionResult IsAdmin()
@@ -61,7 +65,10 @@ namespace AuthenticationAPI.Controllers
             return Ok(new { access = "granted" });
         }
 
-
+        /// <summary>
+        /// for checking if a request's user has moderator permission
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("ismoderator")]
         [Authorize("manage:forums")]
         public ActionResult IsModerator()

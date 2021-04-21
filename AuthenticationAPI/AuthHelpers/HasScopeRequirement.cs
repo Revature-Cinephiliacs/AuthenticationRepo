@@ -9,6 +9,11 @@ namespace KitchenWeb.Helpers
         public string Issuer { get; }
         public string Scope { get; }
 
+        /// <summary>
+        /// creates a check if a requirement exists in the request
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <param name="issuer"></param>
         public HasScopeRequirement(string scope, string issuer)
         {
             Scope = scope ?? throw new ArgumentNullException(nameof(scope));
