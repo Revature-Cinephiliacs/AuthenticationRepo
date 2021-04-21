@@ -26,7 +26,9 @@ namespace AuthenticationAPI.Controllers
         {
             this.User.Claims.ToList().ForEach(claim =>
             {
-                System.Console.WriteLine("key: " + claim.Type);
+                System.Console.WriteLine("type: " + claim.Type);
+                System.Console.WriteLine("subject: " + claim.Subject);
+                System.Console.WriteLine("Issuer: " + claim.Issuer);
                 System.Console.WriteLine("claim: " + claim.Value);
             });
             return Ok(new { access = "granted" });
@@ -52,7 +54,7 @@ namespace AuthenticationAPI.Controllers
 
 
         [HttpGet("isadmin")]
-        [Authorize("manage:website")]
+        [Authorize("manage:awebsite")]
         public ActionResult IsAdmin()
         {
             System.Console.WriteLine("access for admin granted");

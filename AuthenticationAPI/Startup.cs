@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using KitchenWeb.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -68,13 +69,14 @@ namespace AuthenticationAPI
             });
 
             // for permissions/authorization
-            string adminPermisson = "manage:website";
-            // string modPermission = "manage:forums";
+            string adminPermisson = "manage:awebsite";
+            string modPermission = "manage:forums";
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(adminPermisson, policy => policy.Requirements.Add(new HasScopeRequirement(adminPermisson, domain)));
-                // options.AddPolicy(modPermission, policy => policy.Requirements.Add(new HasScopeRequirement(modPermission, domain)));
+                options.AddPolicy(modPermission, policy => policy.Requirements.Add(new HasScopeRequirement(modPermission, domain)));
             });
+            services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
 
             services.AddSwaggerGen(c =>
