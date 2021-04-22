@@ -25,7 +25,7 @@ namespace AuthenticationAPI.AuthHelpers
         public List<string> ExtractPermissions(ClaimsPrincipal user)
         {
             List<string> permissions = new List<string>();
-            permissions.Add("loggedin");
+            // permissions.Add("loggedin");
             user.Claims.Where(c => c.Type == _permissionName).ToList().ForEach(claim =>
             {
                 System.Console.WriteLine("claim type: " + claim.Type + " value: " + claim.Value);
