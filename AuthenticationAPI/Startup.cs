@@ -31,7 +31,8 @@ namespace AuthenticationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<Auth0Helper>();
+            string permissionName = "permissions";
+            services.AddScoped<Auth0Helper>(s => new Auth0Helper(Configuration, permissionName));
 
             services.AddControllers();
 

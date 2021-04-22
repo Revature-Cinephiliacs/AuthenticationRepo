@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace AuthenticationAPI.AuthHelpers
 {
@@ -12,11 +13,26 @@ namespace AuthenticationAPI.AuthHelpers
     {
         private readonly IConfiguration _configuration;
         string baseUrl;
+        private readonly string _permissionName;
 
-        public Auth0Helper(IConfiguration _configuration)
+        public Auth0Helper(IConfiguration _configuration, string _permissionName)
         {
+            this._permissionName = _permissionName;
             this._configuration = _configuration;
             this.baseUrl = $"https://{_configuration["Auth0:Domain"]}";
+        }
+
+        public List<string> ExtractPermissions(ClaimsPrincipal user)
+        {
+            List<string> permissions = new List<string>();
+            permissions.Add("loggedin");
+            user.Claims.Where(c => c.Type == _permissionName).ToList().ForEach(claim =>
+            {
+                System.Console.WriteLine("claim type: " + claim.Type + " value: " + claim.Value);
+                System.Console.WriteLine("yep");
+                permissions.Add(claim.Value);
+            });
+            return permissions;
         }
 
 

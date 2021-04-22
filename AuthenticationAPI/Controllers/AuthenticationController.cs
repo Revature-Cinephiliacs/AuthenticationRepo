@@ -29,7 +29,8 @@ namespace AuthenticationAPI.Controllers
         [Authorize]
         public ActionResult<string> Get()
         {
-            return Ok(new { access = "granted" });
+            var pers = _helper.ExtractPermissions(this.User);
+            return Ok(new { access = "granted", permissions = pers });
         }
 
         /// <summary>
