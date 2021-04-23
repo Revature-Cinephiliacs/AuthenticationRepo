@@ -41,9 +41,12 @@ namespace AuthenticationAPI
             {
                 options.AddPolicy(name: "_corsPolicy",
                     builder => builder
-                    // .WithOrigins("http://localhost:4200/")
+                    .WithOrigins(
+                        "http://localhost:4200/", // test frontend
+                        "https://localhost:5002" // test backend (testapi)
+                    )
                     // .WithOrigins("https://inthekitchenfront.azurewebsites.net/")
-                    .AllowAnyOrigin()
+                    // .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     // .AllowCredentials()
