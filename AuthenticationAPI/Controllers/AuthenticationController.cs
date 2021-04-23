@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AuthenticationAPI.AuthHelpers;
-
+using RestSharp;
 
 namespace AuthenticationAPI.Controllers
 {
@@ -27,7 +27,7 @@ namespace AuthenticationAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public ActionResult<string> Get()
+        public async Task<ActionResult<string>> Get()
         {
             var pers = _helper.ExtractPermissions(this.User);
             return Ok(new { access = "granted", permissions = pers });
@@ -49,6 +49,32 @@ namespace AuthenticationAPI.Controllers
                 return new BadRequestResult();
             }
             return dictionary;
+        }
+
+        /// <summary>
+        /// adds roleName as a role to the user
+        /// </summary>
+        /// <param name="roleName">Either Admin or Moderator</param>
+        /// <returns></returns>
+        [HttpPost("role/{roleName}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> AddRole(string roleName)
+        {
+            System.Console.WriteLine("rolename: " + roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.POST, roleName);
+        }
+
+        /// <summary>
+        /// Removes roleName role from the user roles
+        /// </summary>
+        /// <param name="roleName">Either Admin or Moderator</param>
+        /// <returns></returns>
+        [HttpDelete("role/{roleName}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> DeleteRole(string roleName)
+        {
+            System.Console.WriteLine("rolename: " + roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.DELETE, roleName);
         }
     }
 }

@@ -119,6 +119,32 @@ namespace AuthenticationTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
+        [Fact]
+        public async Task AuthenticationTestAdminRoleManagement()
+        {
+            string userType = "reg";
+            await AuthenticateAsync(userType);
+            dynamic content = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync("authentication/role/Admin", content);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await client.DeleteAsync("authentication/role/Admin");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public async Task AuthenticationTestModeratorRoleManagement()
+        {
+            string userType = "reg";
+            await AuthenticateAsync(userType);
+            dynamic content = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync("authentication/role/Moderator", content);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await client.DeleteAsync("authentication/role/Moderator");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+
         protected async Task AuthenticateAsync(string userType)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync(userType));
@@ -135,7 +161,7 @@ namespace AuthenticationTests
                 case "admin":
                     token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ill4MlRZT1Fja1hwUUlaQ3lJMVNHOSJ9.eyJpc3MiOiJodHRwczovL2NpbmVwaGlsaWFjcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjA4MDU3NGVjOWM5M2UwMDZiODE4ZWU5IiwiYXVkIjpbImh0dHBzOi8vY2luZXBoaWxpYWNzLWFwaS8iLCJodHRwczovL2NpbmVwaGlsaWFjcy51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjE5MTMzNDg3LCJleHAiOjE2MTkyMTk4ODcsImF6cCI6InVEem05QldTYTBKM2VQdWZIbndPanh6S1dPMmhwVzVQIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbIm1hbmFnZTphd2Vic2l0ZSIsIm1hbmFnZTpmb3J1bXMiXX0.kgm46bSLjxUOPoEcBYJTpWM_UOEM8zpskMIJPaGUDgd49C0yyrNlgreEs7AolQvWZdTb_yzxjqkxs6kxG5FlH92tTwFR0-UxSINIolTuJRmWmrF36CMqyQo8jFR-zlUCsfGcJM-2zBX9YwDNlQ8ws67a71TnNVtnN6-sMRZKCbYQT2Lo6Y4hQoYbwHfdtcRIXwF-ibKyytd5uflU8BkrMn62Zf5D5F5ydJ9R8X5N-ZZcXHg5tZ_zEvbVM7BWvM9nN9ZTri5ou8slKh4Br1fVW99D25j3oiMxVMlI6ztVR3C6BeSSNVIGb1tLK2Ha_SDq3uKX6bRGFQAgPEeq1uQ4vA";
                     break;
-                case "mod": 
+                case "mod":
                     token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ill4MlRZT1Fja1hwUUlaQ3lJMVNHOSJ9.eyJpc3MiOiJodHRwczovL2NpbmVwaGlsaWFjcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjA4MjJmMjU1YzcxNGMwMDZmYjA4YjJhIiwiYXVkIjpbImh0dHBzOi8vY2luZXBoaWxpYWNzLWFwaS8iLCJodHRwczovL2NpbmVwaGlsaWFjcy51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjE5MTQ0NjAyLCJleHAiOjE2MTkyMzEwMDIsImF6cCI6InVEem05QldTYTBKM2VQdWZIbndPanh6S1dPMmhwVzVQIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbIm1hbmFnZTpmb3J1bXMiXX0.YbtmJ_3hYuNS2am1v3Bbl-pk03_-OgSZX098Hvg-6E_8BAYnT0NemHqL5O6-_1axqyTdDimADzGNwT40dgBP6P4bmRJLkqRHUheTUkDy6LKhjgwj58S0NwWkcaHfTsggqIhkIXB3L8-DsiLIvEvjBmYfD9pQDFWn57F6BayN1QfpJ8qdlLA6uO8_HJklu2T8RSZoCyHY8glfWCfEUgOqGVfBYJcU_xMq91llVVnTOifyYI2dU0ul5m0nHS0BdkspOcrQylF62GyXZMIEe8sZEtNE0hZ922MngfO33Ok-vai3crVPOZf0BALmMPS8r6KgAFezVLTv6bum_KT2dZi2xw";
                     break;
 
