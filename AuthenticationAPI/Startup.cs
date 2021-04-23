@@ -45,11 +45,8 @@ namespace AuthenticationAPI
                         "http://localhost:4200/", // test frontend
                         "https://localhost:5002" // test backend (testapi)
                     )
-                    // .WithOrigins("https://inthekitchenfront.azurewebsites.net/")
-                    // .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    // .AllowCredentials()
                     );
             });
 

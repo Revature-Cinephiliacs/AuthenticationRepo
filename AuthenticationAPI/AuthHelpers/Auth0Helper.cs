@@ -22,10 +22,15 @@ namespace AuthenticationAPI.AuthHelpers
             this.baseUrl = $"https://{_configuration["Auth0:Domain"]}";
         }
 
+        /// <summary>
+        /// Extracting permissions from the request user. 
+        /// this is used to return permissions to any calling api
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public List<string> ExtractPermissions(ClaimsPrincipal user)
         {
             List<string> permissions = new List<string>();
-            // permissions.Add("loggedin");
             user.Claims.Where(c => c.Type == _permissionName).ToList().ForEach(claim =>
             {
                 System.Console.WriteLine("claim type: " + claim.Type + " value: " + claim.Value);
@@ -34,7 +39,6 @@ namespace AuthenticationAPI.AuthHelpers
             });
             return permissions;
         }
-
 
         /// <summary>
         /// Extract token from request
@@ -89,7 +93,6 @@ namespace AuthenticationAPI.AuthHelpers
             if (body != null)
             {
                 request.AddParameter("application/json", JsonConvert.SerializeObject(body), ParameterType.RequestBody);
-                // request.AddBody(body);
             }
             IRestResponse response = await client.ExecuteAsync(request);
             Console.WriteLine("response.Content");
@@ -97,16 +100,9 @@ namespace AuthenticationAPI.AuthHelpers
             return response;
         }
 
-        public async Task<string> GetUser(string sub, string machineToken)
-        {
-            var response = await Sendrequest("/api/v2/users/" + sub, Method.GET, machineToken);
-            System.Console.WriteLine(response.Content);
-            return response.Content;
-        }
-
         /// <summary>
-        /// Gives admin role when method is POST. <br/>
-        /// Removes admin role when method is DELETE
+        /// Gives "roleName" role when method is POST. <br/>
+        /// Removes "roleName" role when method is DELETE
         /// </summary>
         /// <param name="request">The user request</param>
         /// <param name="method">POST or DELETE</param>
@@ -122,6 +118,7 @@ namespace AuthenticationAPI.AuthHelpers
             }
             var dictionary = await this.GetUserAuth0Dictionary(request);
             var mtok = await this.GetMachineToken();
+            System.Console.WriteLine("machine token: " + mtok);
             var roles = JsonConvert.DeserializeObject<Role[]>((await Sendrequest("/api/v2/roles", Method.GET, mtok)).Content);
             var r = roles.ToList().Where(r => r.name == "Admin").FirstOrDefault();
             var roleID = r.id;
@@ -135,24 +132,40 @@ namespace AuthenticationAPI.AuthHelpers
             return response.IsSuccessful;
         }
 
+        /// <summary>
+        /// Get the machine to machine type of appilcation (In Auth0) token
+        /// </summary>
+        /// <returns></returns>
         public async Task<string> GetMachineToken()
         {
             var client = new RestClient("https://cinephiliacs.us.auth0.com/oauth/token");
             var request = new RestRequest(Method.POST);
             request.AddHeader("content-type", "application/json");
-            request.AddParameter("application/json", "{\"client_id\":\"ApYrBE3Q0xn6c0PJn8lFM8oe5aqjLlvN\",\"client_secret\":\"zs0bBQxgc11gl11JtJbYlJt3dqrEkPTr4OUC-Pn7f-cxNQ4lb38Rnf6WZza5-QWx\",\"audience\":\"https://cinephiliacs.us.auth0.com/api/v2/\",\"grant_type\":\"client_credentials\"}", ParameterType.RequestBody);
+            request.AddParameter("application/json", "{\"client_id\":\""
+            + _configuration["Auth0:machine_id"]
+            + "\",\"client_secret\":\""
+            + _configuration["Auth0:client_secret"]
+            + "\",\"audience\":\""
+            + baseUrl + "/api/v2/"
+            + "\",\"grant_type\":\"client_credentials\"}", ParameterType.RequestBody);
             IRestResponse response = await client.ExecuteAsync(request);
             var tokResp = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
             string token = tokResp.token_type + " " + tokResp.access_token;
             return token;
         }
 
+        /// <summary>
+        /// a class to recieve the machine token
+        /// </summary>
         class TokenResponse
         {
             public string access_token { get; set; }
             public string token_type { get; set; }
         }
 
+        /// <summary>
+        /// A class for recieving the Role from Auth0
+        /// </summary>
         class Role
         {
             public string id { get; set; }
