@@ -65,5 +65,27 @@ namespace AuthenticationTests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", FakeJwtManager.GenerateJwtToken());
         }
 
+        [Fact]
+        public async Task AuthenticationTestAdminRoleManagement()
+        {
+            await AuthenticateAsync();
+            dynamic content = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync("authentication/role/Admin", content);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await client.DeleteAsync("authentication/role/Admin");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+
+        [Fact]
+        public async Task AuthenticationTestModeratorRoleManagement()
+        {
+            await AuthenticateAsync();
+            dynamic content = new StringContent("");
+            HttpResponseMessage response = await client.PostAsync("authentication/role/Moderator", content);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response2 = await client.DeleteAsync("authentication/role/Moderator");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
     }
 }
