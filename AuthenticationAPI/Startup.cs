@@ -42,7 +42,7 @@ namespace AuthenticationAPI
                 options.AddPolicy(name: "_corsPolicy",
                     builder => builder
                     .WithOrigins(
-                        "http://localhost:4200/", // test frontend
+                        "http://localhost:4200/", // test frontend, will change with deployment
                         "https://localhost:5002" // test backend (testapi)
                     )
                     .AllowAnyMethod()

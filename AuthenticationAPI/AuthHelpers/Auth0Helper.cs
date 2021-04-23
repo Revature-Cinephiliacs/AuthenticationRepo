@@ -120,8 +120,8 @@ namespace AuthenticationAPI.AuthHelpers
             var mtok = await this.GetMachineToken();
             System.Console.WriteLine("machine token: " + mtok);
             var roles = JsonConvert.DeserializeObject<Role[]>((await Sendrequest("/api/v2/roles", Method.GET, mtok)).Content);
-            var r = roles.ToList().Where(r => r.name == "Admin").FirstOrDefault();
-            var roleID = r.id;
+            var role = roles.ToList().Where(r => r.name == "Admin").FirstOrDefault();
+            var roleID = role.id;
             dynamic body = new
             {
                 roles = new List<string> { roleID }
