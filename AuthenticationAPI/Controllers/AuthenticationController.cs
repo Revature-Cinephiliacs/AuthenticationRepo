@@ -41,10 +41,6 @@ namespace AuthenticationAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Dictionary<string, string>>> GetUserData()
         {
-            this.User.Claims.ToList().ForEach(claim =>
-            {
-                System.Console.WriteLine("claim: " + claim.Value);
-            });
             // if we need to get user data
             // pass to helper
             var dictionary = await _helper.GetUserAuth0Dictionary(this.Request);
@@ -54,30 +50,5 @@ namespace AuthenticationAPI.Controllers
             }
             return dictionary;
         }
-
-        /// <summary>
-        /// for checking if a request's user has admin permission
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("isadmin")]
-        [Authorize("manage:awebsite")]
-        public ActionResult IsAdmin()
-        {
-            System.Console.WriteLine("access for admin granted");
-            return Ok(new { access = "granted" });
-        }
-
-        /// <summary>
-        /// for checking if a request's user has moderator permission
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("ismoderator")]
-        [Authorize("manage:forums")]
-        public ActionResult IsModerator()
-        {
-            System.Console.WriteLine("access for moderator granted");
-            return Ok(new { access = "granted" });
-        }
-
     }
 }
