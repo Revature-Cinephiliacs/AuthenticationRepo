@@ -22,6 +22,11 @@ namespace AuthenticationAPI.AuthHelpers
             this.baseUrl = $"https://{_configuration["Auth0:Domain"]}";
         }
 
+        /// <summary>
+        /// Extract Permissions From a user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>List of Permissons as String</returns>
         public List<string> ExtractPermissions(ClaimsPrincipal user)
         {
             List<string> permissions = new List<string>();
