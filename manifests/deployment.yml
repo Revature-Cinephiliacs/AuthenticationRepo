@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: revaturecinephiliacsauthenticationrepo 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: revaturecinephiliacsauthenticationrepo
+  template:
+    metadata:
+      labels:
+        app: revaturecinephiliacsauthenticationrepo 
+    spec:
+      containers:
+        - name: revaturecinephiliacsauthenticationrepo 
+          image: 03012021batchp3acr.azurecr.io/revaturecinephiliacsauthenticationrepo
+          ports:
+          - containerPort: 80
