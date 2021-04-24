@@ -1,24 +1,18 @@
-#Grabs a blank image file from microsoft
-#FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-#WORKDIR /app
-#EXPOSE 80
-
-#Exposes port 80
-#ENV ASPNETCORE_URLS=http://+:80
-
-#Grabs blank docker image for building
+# https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-#COPY ["AuthenticationAPI.csproj", "./"]
-#RUN dotnet restore "AuthenticationAPI.csproj"
+
+# copy everything and restore as distinct layers
 COPY . .
+WORKDIR "/src/AuthenticationAPI"
 RUN dotnet build "AuthenticationAPI.csproj" -c Release -o /app/build
-#Uses Release instead of build
+
+# publish app
 FROM build AS publish
 RUN dotnet publish "AuthenticationAPI.csproj" -c Release -o /app/publish
 
-#Creates Image file from the entry point.
-#FROM base AS final
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AuthenticationAPI.dll"]
+ENTRYPOINT ["dotnet", "CinemaAPI.dll"]
