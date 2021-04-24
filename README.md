@@ -14,22 +14,34 @@ Headers: {Authorization: `Bearer ${token}`}
 - look at https://github.com/NNKamel/testapi for "complete" example on using this as a backend api
 - look at https://github.com/NNKamel/auth0-angular-test for "complete" example on using this as a frontend SPA
 
-
 ### Available requests:
 
-GET request:
+GET request: (used in Authentication Middleware automatically)
 
-- {baseurl} --> if user is signed in (token is correct), returns {access: "granted"}, else returns Forbidden Result (status code: 403).
+- {baseurl} -->
 
-GET request:
-
-- {baseurl}/userdata --> if ok, returns user Auth0 Dictionary<string, string>, else returns Forbidden Result (status code: 403).
-
-GET request:
-
-- {baseurl}/isadmin --> if user is signed in and an admin (in auth0), returns {access: "granted"}, else returns Forbidden Result.
+* if user is signed in (token is correct), returns {access: "granted", permissions: [a list of string permissions]}
+* else returns Forbidden Result (status code: 403).
 
 GET request:
 
-- {baseurl}/ismoderator --> if user is signed in and a moderator (in auth0), returns {access: "granted"}, else returns Forbidden Result.
+- {baseurl}/userdata -->
 
+* if ok, returns user Auth0 Dictionary<string, string>
+* else returns Forbidden Result (status code: 403).
+
+POST request:
+
+- {baseurl}/role/{roleName} -->
+
+* if ok, adds the role from the current user token returns True
+* if an error occurs in the process returns false
+* if unauthenticated returns Forbidden Result (status code: 403).
+
+DELETE request:
+
+- {baseurl}/role/{roleName} -->
+
+* if ok, deletes the role from the current user token returns True
+* if an error occurs in the proces returns false
+* if unauthenticated returns Forbidden Result (status code: 403).

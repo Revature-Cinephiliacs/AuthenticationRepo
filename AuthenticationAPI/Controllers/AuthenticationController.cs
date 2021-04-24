@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AuthenticationAPI.AuthHelpers;
-
+using RestSharp;
 
 namespace AuthenticationAPI.Controllers
 {
@@ -27,9 +27,10 @@ namespace AuthenticationAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public ActionResult<string> Get()
+        public async Task<ActionResult<string>> Get()
         {
-            return Ok(new { access = "granted" });
+            var pers = _helper.ExtractPermissions(this.User);
+            return Ok(new { access = "granted", permissions = pers });
         }
 
         /// <summary>
@@ -40,10 +41,6 @@ namespace AuthenticationAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Dictionary<string, string>>> GetUserData()
         {
-            this.User.Claims.ToList().ForEach(claim =>
-            {
-                System.Console.WriteLine("claim: " + claim.Value);
-            });
             // if we need to get user data
             // pass to helper
             var dictionary = await _helper.GetUserAuth0Dictionary(this.Request);
@@ -55,28 +52,29 @@ namespace AuthenticationAPI.Controllers
         }
 
         /// <summary>
-        /// for checking if a request's user has admin permission
+        /// adds roleName as a role to the user
         /// </summary>
+        /// <param name="roleName">Either Admin or Moderator</param>
         /// <returns></returns>
-        [HttpGet("isadmin")]
-        [Authorize("manage:awebsite")]
-        public ActionResult IsAdmin()
+        [HttpPost("role/{roleName}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> AddRole(string roleName)
         {
-            System.Console.WriteLine("access for admin granted");
-            return Ok(new { access = "granted" });
+            System.Console.WriteLine("rolename: " + roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.POST, roleName);
         }
 
         /// <summary>
-        /// for checking if a request's user has moderator permission
+        /// Removes roleName role from the user roles
         /// </summary>
+        /// <param name="roleName">Either Admin or Moderator</param>
         /// <returns></returns>
-        [HttpGet("ismoderator")]
-        [Authorize("manage:forums")]
-        public ActionResult IsModerator()
+        [HttpDelete("role/{roleName}")]
+        [Authorize]
+        public async Task<ActionResult<bool>> DeleteRole(string roleName)
         {
-            System.Console.WriteLine("access for moderator granted");
-            return Ok(new { access = "granted" });
+            System.Console.WriteLine("rolename: " + roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.DELETE, roleName);
         }
-
     }
 }

@@ -31,7 +31,8 @@ namespace AuthenticationAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<Auth0Helper>();
+            string permissionName = "permissions";
+            services.AddScoped<Auth0Helper>(s => new Auth0Helper(Configuration, permissionName));
 
             services.AddControllers();
 
@@ -40,12 +41,12 @@ namespace AuthenticationAPI
             {
                 options.AddPolicy(name: "_corsPolicy",
                     builder => builder
-                    // .WithOrigins("http://localhost:4200/")
-                    // .WithOrigins("https://inthekitchenfront.azurewebsites.net/")
-                    .AllowAnyOrigin()
+                    .WithOrigins(
+                        "http://localhost:4200/", // test frontend, will change with deployment
+                        "https://localhost:5002" // test backend (testapi)
+                    )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    // .AllowCredentials()
                     );
             });
 
@@ -60,7 +61,6 @@ namespace AuthenticationAPI
             {
                 options.Authority = domain;
                 options.Audience = Configuration["Auth0:Audience"];
-                // options.Audience = "https://inthekitchen/";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = ClaimTypes.NameIdentifier
