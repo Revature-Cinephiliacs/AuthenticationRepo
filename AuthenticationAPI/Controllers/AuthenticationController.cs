@@ -55,26 +55,28 @@ namespace AuthenticationAPI.Controllers
         /// adds roleName as a role to the user
         /// </summary>
         /// <param name="roleName">Either Admin or Moderator</param>
+        /// <param name="userid">The id of the user we need to add permission to</param>
         /// <returns></returns>
         [HttpPost("role/{roleName}")]
-        [Authorize]
-        public async Task<ActionResult<bool>> AddRole(string roleName)
+        [Authorize("manage:awebsite")]
+        public async Task<ActionResult<bool>> AddRole(string roleName, [FromBody] string userid)
         {
             System.Console.WriteLine("rolename: " + roleName);
-            return await _helper.ChangeAdminRole(this.Request, Method.POST, roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.POST, roleName, userid);
         }
 
         /// <summary>
         /// Removes roleName role from the user roles
         /// </summary>
         /// <param name="roleName">Either Admin or Moderator</param>
+        /// <param name="userid">The id of the user we need to remove permission from</param>
         /// <returns></returns>
         [HttpDelete("role/{roleName}")]
-        [Authorize]
-        public async Task<ActionResult<bool>> DeleteRole(string roleName)
+        [Authorize("manage:awebsite")]
+        public async Task<ActionResult<bool>> DeleteRole(string roleName, [FromBody] string userid)
         {
             System.Console.WriteLine("rolename: " + roleName);
-            return await _helper.ChangeAdminRole(this.Request, Method.DELETE, roleName);
+            return await _helper.ChangeAdminRole(this.Request, Method.DELETE, roleName, userid);
         }
     }
 }

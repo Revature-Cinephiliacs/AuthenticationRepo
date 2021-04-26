@@ -42,6 +42,10 @@ DELETE request:
 
 - {baseurl}/role/{roleName} -->
 
-* if ok, deletes the role from the current user token returns True
-* if an error occurs in the proces returns false
-* if unauthenticated returns Forbidden Result (status code: 403).
+[REQUIRED BODY]
+
+> userid: string
+
+- if ok, deletes the role from the current user token returns True
+- if an error occurs in the proces returns false
+- if unauthenticated returns Forbidden Result (status code: 403).

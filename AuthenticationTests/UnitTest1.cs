@@ -69,11 +69,18 @@ namespace AuthenticationTests
         public async Task AuthenticationTestAdminRoleManagement()
         {
             await AuthenticateAsync();
-            dynamic content = new StringContent("");
+            StringContent content = new StringContent(JsonConvert.SerializeObject("testuserid"));
             HttpResponseMessage response = await client.PostAsync("authentication/role/Admin", content);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var response2 = await client.DeleteAsync("authentication/role/Admin");
-            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            await AuthenticateAsync();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("authentication/role/Admin", uriKind: UriKind.Relative),
+                Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")
+            };
+            var response2 = await client.SendAsync(request);
+            response2.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
 
@@ -81,11 +88,18 @@ namespace AuthenticationTests
         public async Task AuthenticationTestModeratorRoleManagement()
         {
             await AuthenticateAsync();
-            dynamic content = new StringContent("");
+            StringContent content = new StringContent("testuserid");
             HttpResponseMessage response = await client.PostAsync("authentication/role/Moderator", content);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var response2 = await client.DeleteAsync("authentication/role/Moderator");
-            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            await AuthenticateAsync();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri("authentication/role/Admin", uriKind: UriKind.Relative),
+                Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")
+            };
+            var response2 = await client.SendAsync(request);
+            response2.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
     }
 }
