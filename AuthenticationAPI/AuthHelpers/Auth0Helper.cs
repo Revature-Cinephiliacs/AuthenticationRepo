@@ -107,20 +107,18 @@ namespace AuthenticationAPI.AuthHelpers
         /// <param name="request">The user request</param>
         /// <param name="method">POST or DELETE</param>
         /// <param name="roleName">Currently Available: Admin or Moderator</param>
+        /// <param name="userid">The user we want to change the permission for</param>
         /// <returns></returns>
-        public async Task<bool> ChangeAdminRole(Microsoft.AspNetCore.Http.HttpRequest request, Method method, string roleName)
+        public async Task<bool> ChangeAdminRole(Microsoft.AspNetCore.Http.HttpRequest request, Method method, string roleName, string userid)
         {
-            // Admin: rol_pFa6j3aDlDJJDP4d
-            // Moderator: rol_XMHQtgKAXqlfj9qc
             if (roleName != "Admin" && roleName != "Moderator")
             {
                 return false;
             }
-            var dictionary = await this.GetUserAuth0Dictionary(request);
             var mtok = await this.GetMachineToken();
             System.Console.WriteLine("machine token: " + mtok);
             var roles = JsonConvert.DeserializeObject<Role[]>((await Sendrequest("/api/v2/roles", Method.GET, mtok)).Content);
-            var role = roles.ToList().Where(r => r.name == "Admin").FirstOrDefault();
+            var role = roles.ToList().Where(r => r.name == roleName).FirstOrDefault();
             var roleID = role.id;
             dynamic body = new
             {
@@ -128,11 +126,7 @@ namespace AuthenticationAPI.AuthHelpers
             };
             System.Console.WriteLine("body serialized:");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
-            if (dictionary == null)
-            {
-                return false;
-            }
-            var response = await Sendrequest($"/api/v2/users/{dictionary["sub"]}/roles", method, mtok, body);
+            var response = await Sendrequest($"/api/v2/users/{userid}/roles", method, mtok, body);
             return response.IsSuccessful;
         }
 
