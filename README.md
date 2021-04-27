@@ -1,8 +1,12 @@
 # Authentication Repository
 
-Repository for the Authentication API
+An API used to facilitate authentication across a group of APIs. Handles login authentication and access permissions across the collective solution.
 
-## Instructions
+## Technologies Used
+
+C#, Azure DevOps, ASP.NET Core Web API, Auth0
+
+## Instructions and Installation
 
 baseurl: to be determined
 
@@ -49,3 +53,11 @@ DELETE request:
 - if ok, deletes the role from the current user token returns True
 - if an error occurs in the proces returns false
 - if unauthenticated returns Forbidden Result (status code: 403).
+
+## Licenses
+
+This project is under the MIT License.
+
+## Questions
+
+If you have any questions, please reach out to the creators.
