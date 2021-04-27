@@ -12,7 +12,7 @@ baseurl: to be determined
 
 Headers: {Authorization: `Bearer ${token}`}
 
-### example headers using RestSharp
+### Example headers using RestSharp
 
 - request.AddHeader("Authorization", token);
 - look at https://github.com/NNKamel/testapi for "complete" example on using this as a backend api
