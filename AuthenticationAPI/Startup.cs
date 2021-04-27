@@ -42,8 +42,14 @@ namespace AuthenticationAPI
                 options.AddPolicy(name: "_corsPolicy",
                     builder => builder
                     .WithOrigins(
-                        "http://localhost:4200/", // test frontend, will change with deployment
-                        "https://localhost:5002" // test backend (testapi)
+                        "http://20.189.30.176/", // deployed reviews backend
+                        "http://20.45.6.142/", // deployed forums backend
+                        "http://20.45.0.67/", // deployed groups backend
+                        "http://20.189.29.112/", // deployed adminTools backend
+                        "http://20.189.28.203/", // deployed recommendations backend
+                        "http://20.45.2.119/", // deployed users backend
+                        "http://20.94.153.81/", // deployed movies backend
+                        "http://20.94.137.143/" // deployed angular frontend
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
