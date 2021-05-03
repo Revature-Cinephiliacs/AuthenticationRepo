@@ -49,7 +49,7 @@ namespace AuthenticationTests
         {
             await AuthenticateAsync();
             var response = await client.GetAsync("authentication");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace AuthenticationTests
         {
             await AuthenticateAsync();
             var response = await client.GetAsync("authentication/userdata");
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
         protected async Task AuthenticateAsync()
@@ -71,7 +71,7 @@ namespace AuthenticationTests
             await AuthenticateAsync();
             StringContent content = new StringContent(JsonConvert.SerializeObject("testuserid"));
             HttpResponseMessage response = await client.PostAsync("authentication/role/Admin", content);
-            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             await AuthenticateAsync();
             var request = new HttpRequestMessage
             {
@@ -80,7 +80,7 @@ namespace AuthenticationTests
                 Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")
             };
             var response2 = await client.SendAsync(request);
-            response2.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            response2.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
 
 
@@ -90,7 +90,7 @@ namespace AuthenticationTests
             await AuthenticateAsync();
             StringContent content = new StringContent("testuserid");
             HttpResponseMessage response = await client.PostAsync("authentication/role/Moderator", content);
-            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             await AuthenticateAsync();
             var request = new HttpRequestMessage
             {
@@ -99,7 +99,7 @@ namespace AuthenticationTests
                 Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")
             };
             var response2 = await client.SendAsync(request);
-            response2.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+            response2.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
     }
 }
